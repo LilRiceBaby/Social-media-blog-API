@@ -25,7 +25,7 @@ This project will be a backend for a hypothetical social media app, where we mus
   
   -Returns a JSON object with account_id and 200 OK, or 400 Bad Request on failure.
 
-3. User Login
+2. User Login
    
   -Endpoint: POST /login
   
@@ -37,7 +37,7 @@ This project will be a backend for a hypothetical social media app, where we mus
   
   -Returns the full user object with account_id and 200 OK, or 401 Unauthorized on failure.
    
-5. Post a New Message
+3. Post a New Message
    
   -Endpoint: POST /messages
   
@@ -53,7 +53,7 @@ This project will be a backend for a hypothetical social media app, where we mus
   
   -Returns the new message including message_id and 200 OK, or 400 Bad Request on failure.
    
-7. Get All Messages
+4. Get All Messages
    
   -Endpoint: GET /messages
   
@@ -61,7 +61,7 @@ This project will be a backend for a hypothetical social media app, where we mus
   
   -Always returns 200 OK. If no messages exist, it returns an empty list.
    
-9. Get a Message by ID
+5. Get a Message by ID
     
   -Endpoint: GET /messages/{message_id}
   
@@ -69,7 +69,7 @@ This project will be a backend for a hypothetical social media app, where we mus
   
   -Always returns 200 OK, with the message if found or empty response if not.
 
-11. Delete a Message by ID
+6. Delete a Message by ID
     
   -Endpoint: DELETE /messages/{message_id}
   
@@ -79,7 +79,7 @@ This project will be a backend for a hypothetical social media app, where we mus
   
   -Always returns 200 OK to maintain idempotency.
 
-13. Update a Message by ID
+7. Update a Message by ID
     
   -Endpoint: PATCH /messages/{message_id}
   
@@ -93,7 +93,7 @@ This project will be a backend for a hypothetical social media app, where we mus
   
   -On success, returns updated message and 200 OK. Otherwise, returns 400 Bad Request.
 
-15. Get All Messages by a Specific User
+8. Get All Messages by a Specific User
     
   -Endpoint: GET /accounts/{account_id}/messages
   
