@@ -26,59 +26,103 @@ time_posted_epoch long,
 foreign key (posted_by) references Account(account_id)
 ```
 
-# Requirements
+📌 Features & Requirements
+1. Register a New User
+Endpoint: POST /register
 
-## 1: Our API should be able to process new User registrations.
+Users can create an account by sending a JSON payload with username and password (no account_id).
 
-As a user, I should be able to create a new Account on the endpoint POST localhost:8080/register. The body will contain a representation of a JSON Account, but will not contain an account_id.
+Registration succeeds if:
 
-- The registration will be successful if and only if the username is not blank, the password is at least 4 characters long, and an Account with that username does not already exist. If all these conditions are met, the response body should contain a JSON of the Account, including its account_id. The response status should be 200 OK, which is the default. The new account should be persisted to the database.
-- If the registration is not successful, the response status should be 400. (Client error)
+Username isn’t blank
 
-## 2: Our API should be able to process User logins.
+Password is at least 4 characters
 
-As a user, I should be able to verify my login on the endpoint POST localhost:8080/login. The request body will contain a JSON representation of an Account, not containing an account_id. In the future, this action may generate a Session token to allow the user to securely use the site. We will not worry about this for now.
+Username doesn’t already exist
 
-- The login will be successful if and only if the username and password provided in the request body JSON match a real account existing on the database. If successful, the response body should contain a JSON of the account in the response body, including its account_id. The response status should be 200 OK, which is the default.
-- If the login is not successful, the response status should be 401. (Unauthorized)
+Returns a JSON object with account_id and 200 OK, or 400 Bad Request on failure.
 
+2. User Login
+Endpoint: POST /login
 
-## 3: Our API should be able to process the creation of new messages.
+Users can log in by sending their credentials (without account_id).
 
-As a user, I should be able to submit a new post on the endpoint POST localhost:8080/messages. The request body will contain a JSON representation of a message, which should be persisted to the database, but will not contain a message_id.
+Login succeeds if:
 
-- The creation of the message will be successful if and only if the message_text is not blank, is under 255 characters, and posted_by refers to a real, existing user. If successful, the response body should contain a JSON of the message, including its message_id. The response status should be 200, which is the default. The new message should be persisted to the database.
-- If the creation of the message is not successful, the response status should be 400. (Client error)
+Credentials match an account in the DB
 
-## 4: Our API should be able to retrieve all messages.
+Returns the full user object with account_id and 200 OK, or 401 Unauthorized on failure.
 
-As a user, I should be able to submit a GET request on the endpoint GET localhost:8080/messages.
+3. Post a New Message
+Endpoint: POST /messages
 
-- The response body should contain a JSON representation of a list containing all messages retrieved from the database. It is expected for the list to simply be empty if there are no messages. The response status should always be 200, which is the default.
+Accepts a JSON payload with posted_by, message_text, and time_posted_epoch (no message_id).
 
-## 5: Our API should be able to retrieve a message by its ID.
+Success conditions:
 
-As a user, I should be able to submit a GET request on the endpoint GET localhost:8080/messages/{message_id}.
+Message isn’t blank
 
-- The response body should contain a JSON representation of the message identified by the message_id. It is expected for the response body to simply be empty if there is no such message. The response status should always be 200, which is the default.
+Less than 255 characters
 
-## 6: Our API should be able to delete a message identified by a message ID.
+posted_by refers to a real user
 
-As a User, I should be able to submit a DELETE request on the endpoint DELETE localhost:8080/messages/{message_id}.
+Returns the new message including message_id and 200 OK, or 400 Bad Request on failure.
 
-- The deletion of an existing message should remove an existing message from the database. If the message existed, the response body should contain the now-deleted message. The response status should be 200, which is the default.
-- If the message did not exist, the response status should be 200, but the response body should be empty. This is because the DELETE verb is intended to be idempotent, ie, multiple calls to the DELETE endpoint should respond with the same type of response.
+4. Get All Messages
+Endpoint: GET /messages
 
-## 7: Our API should be able to update a message text identified by a message ID.
+Returns a list of all messages from the DB.
 
-As a user, I should be able to submit a PATCH request on the endpoint PATCH localhost:8080/messages/{message_id}. The request body should contain a new message_text values to replace the message identified by message_id. The request body can not be guaranteed to contain any other information.
+Always returns 200 OK. If no messages exist, it returns an empty list.
 
-- The update of a message should be successful if and only if the message id already exists and the new message_text is not blank and is not over 255 characters. If the update is successful, the response body should contain the full updated message (including message_id, posted_by, message_text, and time_posted_epoch), and the response status should be 200, which is the default. The message existing on the database should have the updated message_text.
-- If the update of the message is not successful for any reason, the response status should be 400. (Client error)
+5. Get a Message by ID
+Endpoint: GET /messages/{message_id}
 
-## 8: Our API should be able to retrieve all messages written by a particular user.
+Fetches a single message by ID.
 
-As a user, I should be able to submit a GET request on the endpoint GET localhost:8080/accounts/{account_id}/messages.
+Always returns 200 OK, with the message if found or empty response if not.
 
-- The response body should contain a JSON representation of a list containing all messages posted by a particular user, which is retrieved from the database. It is expected for the list to simply be empty if there are no messages. The response status should always be 200, which is the default.
+6. Delete a Message by ID
+Endpoint: DELETE /messages/{message_id}
+
+Deletes a message with the given ID.
+
+If it existed, returns the deleted message. If not, returns an empty body.
+
+Always returns 200 OK to maintain idempotency.
+
+7. Update a Message by ID
+Endpoint: PATCH /messages/{message_id}
+
+Accepts a new message_text in the body to update the specified message.
+
+Success conditions:
+
+Message exists
+
+message_text is not blank and under 255 characters
+
+On success, returns updated message and 200 OK. Otherwise, returns 400 Bad Request.
+
+8. Get All Messages by a Specific User
+Endpoint: GET /accounts/{account_id}/messages
+
+Returns all messages posted by a given user.
+
+Always returns 200 OK, even if the list is empty.
+
+🧰 Tech Stack
+Java + Spring Boot (or insert your backend tech here)
+
+SQL for data persistence
+
+Postman for testing
+
+RESTful API principles
+
+💬 Final Thoughts
+This project taught me a lot about backend architecture, handling user input securely, and building out complete CRUD functionality. It’s modular, clean, and easy to build on top of—whether it’s connecting to a frontend or integrating token-based authentication down the line.
+
+If you’re curious to check it out or want to contribute, feel free to reach out!
+
 
