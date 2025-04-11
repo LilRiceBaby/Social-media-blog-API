@@ -10,57 +10,95 @@ This project will be a backend for a hypothetical social media app, where we mus
 📌 Features & Requirements
 
 1. Register a New User
+   
   -Endpoint: POST /register
+  
   -Users can create an account by sending a JSON payload with username and password (no account_id).
+  
   -Registration succeeds if:
+  
   -Username isn’t blank
+  
   -Password is at least 4 characters
+  
   -Username doesn’t already exist
+  
   -Returns a JSON object with account_id and 200 OK, or 400 Bad Request on failure.
 
-2. User Login
+3. User Login
+   
   -Endpoint: POST /login
+  
   -Users can log in by sending their credentials (without account_id).
+  
   -Login succeeds if:
+  
   -Credentials match an account in the DB
+  
   -Returns the full user object with account_id and 200 OK, or 401 Unauthorized on failure.
    
-3. Post a New Message
+5. Post a New Message
+   
   -Endpoint: POST /messages
+  
   -Accepts a JSON payload with posted_by, message_text, and time_posted_epoch (no message_id).
+  
   -Success conditions:
+  
   -Message isn’t blank
+  
   -Less than 255 characters
+  
   -posted_by refers to a real user
+  
   -Returns the new message including message_id and 200 OK, or 400 Bad Request on failure.
    
-4. Get All Messages
+7. Get All Messages
+   
   -Endpoint: GET /messages
+  
   -Returns a list of all messages from the DB.
+  
   -Always returns 200 OK. If no messages exist, it returns an empty list.
    
-5. Get a Message by ID
+9. Get a Message by ID
+    
   -Endpoint: GET /messages/{message_id}
+  
   -Fetches a single message by ID.
+  
   -Always returns 200 OK, with the message if found or empty response if not.
 
-6. Delete a Message by ID
+11. Delete a Message by ID
+    
   -Endpoint: DELETE /messages/{message_id}
+  
   -Deletes a message with the given ID.
+  
   -If it existed, returns the deleted message. If not, returns an empty body.
+  
   -Always returns 200 OK to maintain idempotency.
 
-7. Update a Message by ID
+13. Update a Message by ID
+    
   -Endpoint: PATCH /messages/{message_id}
+  
   -Accepts a new message_text in the body to update the specified message.
+  
   -Success conditions:
+  
   -Message exists
+  
   -message_text is not blank and under 255 characters
+  
   -On success, returns updated message and 200 OK. Otherwise, returns 400 Bad Request.
 
-8. Get All Messages by a Specific User
+15. Get All Messages by a Specific User
+    
   -Endpoint: GET /accounts/{account_id}/messages
+  
   -Returns all messages posted by a given user.
+  
   -Always returns 200 OK, even if the list is empty.
 
 🧰 Tech Stack
